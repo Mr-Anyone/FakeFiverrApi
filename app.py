@@ -19,7 +19,7 @@ class PageContent(Resource):
             contents = []
             index = 0
             for row in file:
-                if row[0] != "Search Tag":
+                if row[0] != "Search Tag" and index >= ((page-1)*post_per_page) and index <= (page*post_per_page -1):
                     contents.append({
                         "Search_Tag": row[0],
                         "Title": row[1],
@@ -27,9 +27,10 @@ class PageContent(Resource):
                         "Seler_Picure" : f"{domain}/get_image/{urllib.parse.quote(row[1]+ ' 0 ' +row[4]+ '.png')}",
                         "Gig_Picture" : f"{domain}/get_image/{urllib.parse.quote(row[4]+'.png')}",
                     })
-                    index += 1
-                if index == post_per_page:
-                    break  # don't send to much data at once
+                index += 1
+
+                if index > page*post_per_page -1:
+                    break
 
         return {"Results": contents}
 
