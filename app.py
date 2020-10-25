@@ -8,7 +8,7 @@ app = Flask(__name__)
 api = Api(app)
 post_per_page = 10
 
-domain = "http://localhost:5000"
+domain = "https://2cd60989f482.ngrok.io"
 
 
 class PageContent(Resource):
@@ -24,8 +24,8 @@ class PageContent(Resource):
                         "Search_Tag": row[0],
                         "Title": row[1],
                         "Seller_Name": row[4],
-                        "Seler_Picure" : f"{domain}/get_image/{urllib.parse.quote(row[1]+ ' 0 ' +row[4]+ '.png')}",
-                        "Gig_Picture" : f"{domain}/get_image/{urllib.parse.quote(row[4]+'.png')}",
+                        "Gig_Picture" : f"{domain}/get_image/{urllib.parse.quote(row[1]+ ' 0 ' +row[4]+ '.png')}",
+                        "Seler_Picure" : f"{domain}/get_image/{urllib.parse.quote(row[4]+'.png')}",
                     })
                 index += 1
 
