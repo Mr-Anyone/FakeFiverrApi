@@ -2,6 +2,7 @@ import csv
 import os
 from flask import Flask, send_file
 from flask_restful import Api, Resource
+import urllib.parse
 
 app = Flask(__name__)
 api = Api(app)
@@ -23,8 +24,8 @@ class PageContent(Resource):
                         "Search_Tag": row[0],
                         "Title": row[1],
                         "Seller_Name": row[4],
-                        "Seler_Picure" : f"{domain}/get_image/{row[1]} 0 {row[4]}.png",
-                        "Gig_Picture" : f"{domain}/get_image/{row[4]}.png",
+                        "Seler_Picure" : f"{domain}/get_image/{urllib.parse.quote(row[1]+ ' 0 ' +row[4]+ '.png')}",
+                        "Gig_Picture" : f"{domain}/get_image/{urllib.parse.quote(row[4]+'.png')}",
                     })
                     index += 1
                 if index == post_per_page:
