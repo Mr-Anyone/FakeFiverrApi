@@ -8,7 +8,7 @@ app = Flask(__name__)
 api = Api(app)
 post_per_page = 10
 
-domain = "https://2cd60989f482.ngrok.io"
+domain = "https://576468aa62e1.ngrok.io"
 
 
 class PageContent(Resource):
@@ -34,6 +34,28 @@ class PageContent(Resource):
 
         return {"Results": contents}
 
+class SolidWorkConetent(Resource):
+    def get(self, page):
+        contents = []
+        with open(os.path.join(os.curdir, "templates", "")) as f:
+            file = csv.reader(f, delimiter=',')
+            index = 0
+            for row in file:
+                if row[0] != "Search Tag" and index >= ((page - 1) * post_per_page) and index <= (page * post_per_page - 1):
+                    contents.append({
+                        "Search_Tag": row[0],
+                        "Title": row[1],
+                        "Seller_Name": row[4],
+                        "Gig_Picture": f"{domain}/get_image/{urllib.parse.quote(row[1] + ' 0 ' + row[4] + '.png')}",
+                        "Seler_Picure": f"{domain}/get_image/{urllib.parse.quote(row[4] + '.png')}",
+                    })
+
+                index += 1
+                if index > page*post_per_page -1:
+                    break # saving computation expense
+
+        return {"Results" : contents}
+
 @app.route('/get_image/<filename>')
 def get_image(filename):
     # This would reutrn the image
@@ -42,8 +64,7 @@ def get_image(filename):
     else:
         return "ERROR"
 
-
-
+api.add_resource(SolidWorkConetent, "/api/solidworks/<int:page>")
 api.add_resource(PageContent, "/api/<int:page>")
 
 if __name__ == "__main__":
